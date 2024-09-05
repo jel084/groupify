@@ -1,0 +1,13 @@
+.bars{
+    position:absolute;
+    top: 15px;
+    left:20px;
+    width: 50px;
+}
+
+.introName{
+    font-family: "sen",sans-serif;
+    font-size:3.5em;
+    padding-top:60px;
+    padding-left:107px;
+}
