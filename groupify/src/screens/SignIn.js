@@ -6,12 +6,12 @@ import { AiOutlineMail, AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 
 const SignIn = () => {
   return (
-    <div className="bg-[#FFFFFF] min-h-screen flex flex-col items-center justify-center text-black">
+    <div className="bg-[#FFFFFF] min-h-screen flex flex-col items-center justify-center text-black font-sen">
       <h1 className="text-8xl pb-5">groupify</h1>
       <div className="w-full max-w-sm">
         <div className="mb-4">
-          <p className="text-xl">Sign Up</p>
-          <p className="pb-1">Please sign up to continue</p>
+          <p className="text-xl drop-shadow-md">Sign Up</p>
+          {/* <p className="pb-1">Please sign up to continue</p> */}
         </div>
         <form className="space-y-4">
           <CustomInput icon={<AiOutlineMail />} type="text" placeholder="Email" />
