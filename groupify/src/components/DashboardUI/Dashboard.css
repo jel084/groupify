@@ -9,5 +9,30 @@
     font-family: "sen",sans-serif;
     font-size:3.5em;
     padding-top:60px;
-    padding-left:107px;
+    padding-left:400px;
+    text-shadow: 3px 3px 11px rgba(0, 0, 0, 0.3);
+}
+
+.rectangle {
+    width: 500px; 
+    height: 600px; 
+    background-color: #ffffff;
+    border: 2px none #000; 
+    padding: 100px;
+    margin-top: 50px;
+    margin-left: 400px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.rectangle2 {
+    width: 500px; 
+    height: 600px; 
+    background-color: #ffffff;
+    border: 2px none #000; 
+    padding: 100px;
+    margin-top: -600px;
+    margin-left: 1100px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
 }

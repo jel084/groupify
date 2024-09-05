@@ -4,10 +4,14 @@ import './Dashboard.css'
 export const Dashboard = () => {
 return (
     <div>
-    <img className = 'bars' src = {threebar}/>
-        <h1 className = 'introName'>
-            Hello Raul
-        </h1>
+        
+            <h1 className = 'introName'>
+                Hello Raul!
+            </h1>
+            <div className="rectangle"/>
+            <div className="rectangle2"/>
     </div>
 );
 }
+
+export default Dashboard;
