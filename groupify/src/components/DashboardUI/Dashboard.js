@@ -4,14 +4,21 @@ import './Dashboard.css'
 export const Dashboard = () => {
 return (
     <div>
+
+        <h1 className = 'introName'>
+            Hello Raul!
+        </h1>
         
-            <h1 className = 'introName'>
-                Hello Raul!
-            </h1>
-            <div className="rectangle"/>
-            <div className="rectangle2"/>
+        
+
+        <div class="container">
+            <div class="rectangle"/>
+            <div class="rectangle2"/>
+        </div>
+
     </div>
 );
 }
+
 
 export default Dashboard;

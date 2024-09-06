@@ -23,7 +23,20 @@ function Navbar() {
               onClick={showSidebar}
               style={{ width: "48px", height: "48px", cursor: "pointer" }} 
             />
+
           </Link>
+          {/* ------ */}
+          <nav id="desktop-nav">
+                <div>
+                    <ul class="nav-links">
+                        <li><a href="#about">Dashboard</a></li>
+                        <li><a href="#swipe">Swipe</a></li>
+                        <li><a href="#messages">Messages</a></li>
+                    </ul>
+                </div>
+            </nav>
+{/* ------ */}
+
         </div>
         <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
           <ul className="nav-menu-items" onClick={showSidebar}>
