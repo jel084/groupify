@@ -43,7 +43,7 @@
 
 .nav-menu {
   background-color: #FFFADE;
-  width: 350px;
+  width: 450px;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -63,7 +63,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 8px 0px 8px 16px;
+  padding: 50px 0px 30px 16px;
   list-style: none;
   height: 60px;
 }
@@ -71,7 +71,7 @@
 .nav-text a {
   text-decoration: none;
   color: #151414;
-  font-size: 30px;
+  font-size: 35px;
   width: 95%;
   height: 100%;
   display: flex;
@@ -81,8 +81,8 @@
 }
 
 .nav-text a:hover {
-  background-color: #5FB1B1;
-  color: #fff;
+  /* background-color: #5FB1B1; */
+  color: #5FB1B1;
 }
 
 .nav-menu-items {

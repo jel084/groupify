@@ -5,25 +5,25 @@ import * as IoIcons from "react-icons/io";
 
 export const Sidebar = [
   {
-    title: "Dashboard",
+    title: "Profile",
     path: "/",
     icon: <AiIcons.AiFillHome />,
     cName: "nav-text",
   },
   {
-    title: "Swipe",
+    title: "Settings",
     path: "/swipe",
     icon: <IoIcons.IoIosPaper />,
     cName: "nav-text",
   },
   {
-    title: "Messages",
+    title: "Support",
     path: "/messages",
     icon: <FaIcons.FaEnvelopeOpenText />,
     cName: "nav-text",
   },
   {
-    title: "Profile",
+    title: "About",
     path: "/profile",
     icon: <IoIcons.IoMdPeople />,
     cName: "nav-text",

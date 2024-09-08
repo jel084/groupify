@@ -25,13 +25,14 @@ function Navbar() {
             />
 
           </Link>
+          
           {/* ------ */}
           <nav id="desktop-nav">
                 <div>
                     <ul class="nav-links">
-                        <li><a href="#about">Dashboard</a></li>
-                        <li><a href="#swipe">Swipe</a></li>
-                        <li><a href="#messages">Messages</a></li>
+                        <li><a href="/">Dashboard</a></li>
+                        <li><a href="/swipe">Swipe</a></li>
+                        <li><a href="/messages">Messages</a></li>
                     </ul>
                 </div>
             </nav>
