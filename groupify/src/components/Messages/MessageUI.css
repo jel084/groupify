@@ -34,10 +34,58 @@
     position: relative;
 }
 .currMessage{
-    min-width: 60%;
+    min-width: 70%;
     max-width: 45vw;
     height: 80vh;
+    max-height: 84.4%;
     background-color: rgb(255, 255, 255);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    margin: 10px;
+    position: relative;
+    margin-top: 5%;
+}
+
+/* .currDm{
+    max-width: 20%;
+    max-height: 3%;
+    height: 70vh;
+    background-color: rgb(0, 0, 0);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 70px;
+    margin: 10px;
+    position: relative;
+} */
+
+.groupDm{
+    min-width: 20%;
+    max-width: 45vw;
+    max-height: 20%;
+    height: 80vh;
+    background-color: rgb(0, 0, 0);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    margin: 10px;
+    position: relative;
+}
+.personalDm{
+    min-width: 20%;
+    max-width: 45vw;
+    max-height: 67%;
+    height: 80vh;
+    background-color: rgb(0, 0, 0);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    margin: 10px;
+    position: relative;
+}
+
+.search{
+    min-width: 20%;
+    max-width: 45vw;
+    max-height: 9%;
+    height: 80vh;
+    background-color: rgb(0, 0, 0);
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     margin: 10px;

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import "../App.css";
 import { IconContext } from "react-icons";
 import threebar from '../pictures/threebar.png';
+import { FaRegBell } from "react-icons/fa";
+
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
@@ -33,6 +34,7 @@ function Navbar() {
                         <li><a href="/">Dashboard</a></li>
                         <li><a href="/swipe">Swipe</a></li>
                         <li><a href="/messages">Messages</a></li>
+                        <li><button className="notf"> <FaRegBell size = {45}/> </button></li>
                     </ul>
                 </div>
             </nav>
