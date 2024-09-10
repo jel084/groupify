@@ -1,26 +1,47 @@
-import logo from './logo.svg';
+import React from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, Outlet } from 'react-router-dom';
+import Dashboard from './components/DashboardUI/Dashboard';
+import Profile from './components/ProfileSetup/Profile'; 
+import MessageUI from './components/Messages/MessageUI'; 
+import Swipe from './components/SwipePage/Swipe'; 
+import Navbar from './routeComps/Navbar';
 import './App.css';
+
+const AppLayout = () => (
+  <>
+    <Navbar />
+    <Outlet />
+  </>
+);
+
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Dashboard />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
+      },
+      {
+        path: "/messages",
+        element: <MessageUI />,
+      },
+      {
+        path: "/swipe",
+        element: <Swipe />,
+      },
+    ],
+  },
+]);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-        <h1 className="text-3xl font-bold underline">
-          Hello world!
-        </h1>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RouterProvider router={router} />
   );
 }
 
