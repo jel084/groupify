@@ -31,7 +31,7 @@ function Navbar() {
           <nav id="desktop-nav">
                 <div>
                     <ul class="nav-links">
-                        <li><a href="/">Dashboard</a></li>
+                        <li><a href="/dashboard">Dashboard</a></li>
                         <li><a href="/swipe">Swipe</a></li>
                         <li><a href="/messages">Messages</a></li>
                         <li><button className="notf"> <FaRegBell size = {45}/> </button></li>
