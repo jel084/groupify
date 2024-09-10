@@ -22,7 +22,7 @@ function Navbar() {
               src={threebar}
               alt="Menu"
               onClick={showSidebar}
-              style={{ width: "48px", height: "48px", cursor: "pointer" }} 
+              style={{ width: "30px", height: "30px", cursor: "pointer" }} 
             />
 
           </Link>
@@ -34,7 +34,7 @@ function Navbar() {
                         <li><a href="/dashboard">Dashboard</a></li>
                         <li><a href="/swipe">Swipe</a></li>
                         <li><a href="/messages">Messages</a></li>
-                        <li><button className="notf"> <FaRegBell size = {45}/> </button></li>
+                        <li><button className="notf"> <FaRegBell size = {25}/> </button></li>
                     </ul>
                 </div>
             </nav>
@@ -45,7 +45,7 @@ function Navbar() {
           <ul className="nav-menu-items" onClick={showSidebar}>
             <li className="navbar-toggle">
               <Link to="#" className="menu-bars">
-                <AiIcons.AiOutlineClose size={48}/>
+                <AiIcons.AiOutlineClose size={25}/>
               </Link>
             </li>
             {Sidebar.map((item, index) => {
