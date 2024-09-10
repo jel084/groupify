@@ -11,11 +11,15 @@ const SignIn = () => {
   const [password,setPassword] = useState('');
   const [username,setUsername] = useState('');
   const [error,setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false); 
 
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
     try{
       await createUserWithEmailAndPassword(auth, email, password);
       console.log('User signed up:', username, email);
@@ -23,10 +27,11 @@ const SignIn = () => {
     } catch (err) {
       setError(err.message);
       console.error('Error signing up:', err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const [loading, setLoading] = useState(true);
   useEffect(() => {
   setLoading(true);
   setTimeout(() => {
@@ -61,7 +66,7 @@ const SignIn = () => {
             <CustomInput icon={<AiOutlineMail />} type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <CustomInput icon={<AiOutlineLock />} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <CustomInput icon={<AiOutlineUser />} type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <FormButton btnText="Sign Up" />
+            <FormButton btnText={isSubmitting ? "Signing In..." : "Sign In"} /> {/* Button shows loading state */}
           </form>
           {error && <p className="text-red-500">{error}</p>}
           <div className="text-center">
