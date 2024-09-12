@@ -1,4 +1,5 @@
 import React from "react";
+import { getStorage } from 'firebase/storage';
 import CSE_Banner from '../../pictures/CSE_Banner.jpg';
 
 function Profile() {

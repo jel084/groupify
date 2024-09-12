@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import CustomInput from '../components/CustomInput';
 import FormButton from '../components/FormButton';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { Link, useNavigate } from 'react-router-dom'; 
 import { AiOutlineMail, AiOutlineLock } from 'react-icons/ai';
-import { auth } from '../firebase'; // Ensure this points to your firebase config file
+import { auth } from '../firebase'; 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
@@ -11,7 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Add a loading state for button submission
+  const [isSubmitting, setIsSubmitting] = useState(false); 
   
   const navigate = useNavigate();
 
