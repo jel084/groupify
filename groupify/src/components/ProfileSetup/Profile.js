@@ -1,5 +1,5 @@
 import React from "react";
-import { getStorage } from 'firebase/storage';
+import ProfilePicture from "./ProfilePic";
 import CSE_Banner from '../../pictures/CSE_Banner.jpg';
 
 function Profile() {
@@ -14,6 +14,7 @@ function Profile() {
                     />
                 </div>
                 {/* Content Area */}
+                <ProfilePicture></ProfilePicture>
                 <div className="p-6">
                     <p>Stuf...</p>
                     <p>Stuf...</p>

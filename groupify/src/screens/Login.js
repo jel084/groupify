@@ -3,7 +3,7 @@ import CustomInput from '../components/CustomInput';
 import FormButton from '../components/FormButton';
 import { Link, useNavigate } from 'react-router-dom'; 
 import { AiOutlineMail, AiOutlineLock } from 'react-icons/ai';
-import { auth } from '../firebase'; 
+import { auth } from "../firebase"
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
