@@ -14,7 +14,16 @@ function Profile() {
                     />
                 </div>
                 {/* Content Area */}
-                <ProfilePicture></ProfilePicture>
+                <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 drop-shadow-md">
+                    <ProfilePicture />
+                </div>
+                <div className="flex flex-col items-center mt-20"> 
+                    <div className="text-center font-bold">real name here</div>
+                    <div className="text-center text-gray-600">Username</div>
+                </div>
+                <div>about me</div>
+                <div>courses</div>
+                <div>preferences</div>
                 <div className="p-6">
                     <p>Stuf...</p>
                     <p>Stuf...</p>
