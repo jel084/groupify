@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineMail, AiOutlineUser, AiOutlineLock } from 'react-icons/ai';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { db } from '../firebase'; // Adjust the path as needed
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 const SignIn = () => {
   const [email,setEmail] = useState('');
@@ -13,18 +15,32 @@ const SignIn = () => {
   const [error,setError] = useState('');
 
   const navigate = useNavigate();
-
   const handleSignUp = async (e) => {
     e.preventDefault();
     try{
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential= await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
       console.log('User signed up:', username, email);
+      await addUserToFirestore(user);
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);
       console.error('Error signing up:', err);
     }
   };
+
+  const addUserToFirestore = async (user) => {
+    try {
+        const userRef = doc(collection(db, 'users'), user.uid);
+        await setDoc(userRef, {
+            email: user.email || 'No Email'
+            
+        });
+        console.log('User added to Firestore!');
+    } catch (error) {
+        console.error('Error adding user:', error);
+    }
+};
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
