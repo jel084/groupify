@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import CustomInput from '../components/CustomInput';
 import FormButton from '../components/FormButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineMail, AiOutlineLock } from 'react-icons/ai';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -11,11 +11,14 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log('User logged in:', email);
+      navigate('/dashboard');
       //navigate to dashboard
     } catch (err) {
       setError(err.message);
