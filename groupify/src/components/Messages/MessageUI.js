@@ -9,7 +9,7 @@ function MessageUI() {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [userId, setUserId] = useState(''); // State to store user ID
-
+    const [loading, setLoading] = useState(true);
     //This method checks for the user authentication. I dont know if its entirely necessary, however, chatgpt said it was.
     //in the first part of the if statement it logs the user id and then sets the user id to the userId variable.
     //After doing that, it loads the users that this user has started a chat with. the loadSelectedUsers method makes a little more sense later on.
@@ -39,6 +39,7 @@ function MessageUI() {
     // then goes through an if statement. If the data exists, assign the data to a variable called 'data' and then populate the selectedUsers array with the data.
     // If the user hasn't interacted with anyone, set an empty array for this user. 
     const loadSelectedUsers = async (userId) => {
+        setLoading(true); // Start loading
         try {
             const docSnap = await getDoc(doc(db, 'userChats', userId));
             if (docSnap.exists()) {
@@ -51,6 +52,8 @@ function MessageUI() {
             }
         } catch (error) {
             console.error('Error loading selected users:', error);
+        } finally {
+            setLoading(false); // End loading
         }
     };
 
@@ -58,20 +61,16 @@ function MessageUI() {
     // and then goes into a try catch block. Inside the "try" the program will set the data into the 'userChats' collection using the setDoc method. To explain it a little more,
     // its going into the 'userChats' collection and then going into the current user's ID and then setting the data that was obtained when the user tried to interact with another person. 
 
-    useEffect(() => {
-        const saveSelectedUsers = async () => {
-            if (userId) {
-                try {
-                    await setDoc(doc(db, 'userChats', userId), { selectedUsers });
-                    console.log('Selected users saved');
-                } catch (error) {
-                    console.error('Error saving selected users:', error);
-                }
+    const saveSelectedUsers = async (newSelectedUsers) => {
+        if (userId && !loading) { // Ensure not to save during loading
+            try {
+                await setDoc(doc(db, 'userChats', userId), { selectedUsers: newSelectedUsers });
+                console.log('Selected users saved:', newSelectedUsers);
+            } catch (error) {
+                console.error('Error saving selected users:', error);
             }
-        };
-        saveSelectedUsers();
-    }, [selectedUsers, userId]);
-
+        }
+    };
     // This method is still a bit iffy for me, however, the important part of it is that it handles the search function. I understand the userQuery line, however, the lines after that I need to research
     // a bit more. If you wanna look into it and teach me that would be amazing, however, if you'd wanna look at it together thats completely fine as well.
 
@@ -97,6 +96,7 @@ function MessageUI() {
             const updatedSelectedUsers = [...selectedUsers, user];
             console.log('Updating selected users:', updatedSelectedUsers); // Log the updated array
             setSelectedUsers(updatedSelectedUsers);
+            saveSelectedUsers(updatedSelectedUsers); // Only save after the array updates
         }
     };
 
@@ -156,7 +156,7 @@ function MessageUI() {
                                 ))}
                             </ul>
                         ) : (
-                            <p>No users found</p>
+                            <p></p>
                         )}
                     </div>
                     <div className="groupDm">
