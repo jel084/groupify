@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../Messages/MessageUI.css'; // Assuming your existing CSS file path
 import { db } from '../../firebase'; // Import Firestore instance
-import { collection, query, where, getDocs, doc, setDoc, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function MessageUI() {
@@ -99,6 +99,52 @@ function MessageUI() {
             saveSelectedUsers(updatedSelectedUsers); // Only save after the array updates
         }
     };
+    
+    //this one takes care of the sending of messages and stores it in firebase - takes in two parameters the userID and content
+    //question for later - how did we want to structure this, i was looking at the firebase 
+    //and it seems like theres three collections - messages, userChats, users 
+    //is the userChats storing the connections that preexists between different users and then 
+    //messages are storing the actual messages? i took a look at what chatgbt says and i think its suggesting
+    //userChats and then inside userChats is then where we store the messaging and then it would just log the currMessages being sent between 
+    //wanted to check in before I did anything tho 
+    // const sendMessage = async(recipientID, messageContent) => {
+    //     //grabs doc of userChats with current userID 
+    //     const chatDocRef = doc(db, 'userChats', userID);
+    //     //reference to 'messaegs' collection within the userID doc under uesrChats (subcollection)
+    //     const messagesRef = collection(chatDocRef, 'messages')
+
+    //     try{
+    //         //creates subcollection with necessary components 
+    //         await addDoc(messagesRef, {
+    //             senderID: userID,
+    //             recipientID,
+    //             content: messageContent,
+    //             timestamp: serverTimestamp(),
+    //         });
+    //         console.log('Message sent succesfully');
+    //     } catch(error){
+    //         console.error("Error sending message:", error)
+    //     }
+    // }; 
+
+    //this one is used to loadMessages -> takes userChats and then goes into the messaegs 
+    //ordering it by timestamp 
+    // const loadMessages = async () => {
+    //     const chatDocRef = doc(db, 'userChats', userId);
+    //     const messagesRef = collection(chatDocRef, 'messages');
+    //     const messagesQuery = query(messagesRef, orderBy('timestamp', 'asc'));
+    
+    //     try {
+    //         const querySnapshot = await getDocs(messagesQuery);
+    //         const messages = querySnapshot.docs.map(doc => doc.data());
+    //         console.log('Loaded messages:', messages);
+    //         // Update your state or UI with the retrieved messages
+    //     } catch (error) {
+    //         console.error('Error loading messages:', error);
+    //     }
+    // };
+
+
 
     // This is all styling things that are still really confusing to me, we can look at this later if you'd like.
 
