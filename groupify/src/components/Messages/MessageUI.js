@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "../Messages/MessageUI.css"; // Assuming your existing CSS file path
 import { db } from "../../firebase"; // Import Firestore instance
-import { collection, query, where, getDocs, doc, setDoc, getDoc, serverTimestamp, addDoc, orderBy, } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp,
+  addDoc,
+  orderBy,
+} from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function MessageUI() {
@@ -142,6 +153,9 @@ function MessageUI() {
 
   return (
     <>
+    <div className="absolute bottom-0 -left-4 w-2/5 h-1/3 bg-[#329D9C] rounded-full mix-blend-multiply filter blur-xl opacity-45 animate-blob drop-shadow-md"></div>
+          <div className="absolute bottom-0 -right-4 w-2/5 h-1/3 bg-[#bdf2c1] rounded-full mix-blend-multiply filter blur-xl opacity-45 animate-blob animation-delay-4000 drop-shadow-md"></div>
+          <div className="absolute bottom-0 -right-200 w-2/5 h-1/3 bg-[#b2d7d9] rounded-full mix-blend-multiply filter blur-xl opacity-45 animate-blob animation-delay-2000 drop-shadow-md"></div>
       <div className="header">
         <h1 className="Title">Messages</h1>
       </div>
@@ -212,32 +226,39 @@ function MessageUI() {
           </div>
         </div>
 
-        <div className="min-w-[70%] max-w-[45vw] h-[80vh] max-h-[84.4%] bg-white shadow-[5px_5px_15px_rgba(0,0,0,0.3)] relative mt-[5%] m-2.5 rounded-[10px] mt-4 mx-auto p-4 flex flex-col">
-        <div className="overflow-auto flex flex-col-reverse items-end px-15">
-        {messages.length > 0 ? (
-          <ul>
-            {messages.map((msg, index) => (
-              <li
-                key={index}
-                className={`message max-w-xs ${
-                  msg.senderID === userId ? "sent" : "received"
-                }`}
-              >
-                <p>{msg.content}</p>
-                <span>
-                  {new Date(msg.timestamp.seconds * 1000).toLocaleTimeString()}
-                </span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No messages</p>
-        )}
-      </div>
-          <div className="flex-grow mb-4">
-            {/* Display messages here */}
+        <div className="min-w-[70%] max-w-[45vw] h-[80vh] max-h-[84.4%] bg-green shadow-lg rounded-lg relative mx-auto mt-4 flex flex-col">
+          <div className="flex overflow-auto p-4 flex-col-reverse ">
+            <ul className="space-y-4">
+              {messages.length > 0 ? (
+                messages.map((msg, index) => (
+                  <li
+                    key={index}
+                    className={`flex items-start ${
+                      msg.senderID === userId ? "justify-end" : "justify-start"
+                    }`}
+                  >
+                    <div
+                      className={`max-w-xs px-4 py-2 rounded-lg ${
+                        msg.senderID === userId
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-200 text-gray-800"
+                      }`}
+                    >
+                      <p>{msg.content}</p>
+                      <span className="text-xs text-gray-500">
+                        {new Date(
+                          msg.timestamp.seconds * 1000
+                        ).toLocaleTimeString()}
+                      </span>
+                    </div>
+                  </li>
+                ))
+              ) : (
+                <p className="text-center">No messages</p>
+              )}
+            </ul>
           </div>
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center p-4 border-t border-gray-200 bg-white">
             <input
               type="text"
               placeholder="Type a message"
@@ -251,9 +272,9 @@ function MessageUI() {
                 await loadMessages(); // Ensure messages are loaded after sending
                 setMessageContent(""); // Optionally clear the message input after sending
               }}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
             >
-              Send Message
+              Send
             </button>
           </div>
         </div>
