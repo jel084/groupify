@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   addDoc,
   orderBy,
+  onSnapshot,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -98,11 +99,11 @@ function MessageUI() {
       const updatedSelectedUsers = [...selectedUsers, user];
       console.log("Updating selected users:", updatedSelectedUsers);
       setSelectedUsers(updatedSelectedUsers);
-      saveSelectedUsers(updatedSelectedUsers);
+      await saveSelectedUsers(updatedSelectedUsers);
     }
 
     setSelectedRecipientId(user.id);
-    await loadMessages(); // Load messages for the selected user
+    loadMessages(user.id); // Load messages for the selected user
   };
 
   const sendMessage = async (recipientID, messageContent) => {
@@ -116,17 +117,26 @@ function MessageUI() {
 
       // Grabs the document reference for the current user's chat
       const chatDocRef = doc(db, "userChats", userId);
+      const chatDocRef2 = doc(db, "userChats", recipientID);
 
       // References the 'messages' subcollection within the userChats document
-      const messagesRef = collection(chatDocRef, "messages");
+      const messagesRef = collection(chatDocRef, selectedRecipientId);
+      const messageRef2 = collection(chatDocRef2, userId);
 
-      // Adds a new document to the 'messages' subcollection
-      await addDoc(messagesRef, {
-        senderID: userId,
-        recipientID,
-        content: messageContent,
-        timestamp: serverTimestamp(), // Adds a server timestamp
-      });
+      await Promise.all([
+        addDoc(messagesRef, {
+          senderID: userId,
+          recipientID,
+          content: messageContent,
+          timestamp: serverTimestamp(),
+        }),
+        addDoc(messageRef2, {
+          senderID: userId,
+          recipientID,
+          content: messageContent,
+          timestamp: serverTimestamp(),
+        }),
+      ]);
 
       console.log("Message sent successfully");
     } catch (error) {
@@ -134,28 +144,44 @@ function MessageUI() {
     }
   };
 
-  const loadMessages = async () => {
-    if (!userId) return; // Ensure userId is set
+  const loadMessages = (recipientID) => {
+    if (!userId || !recipientID) return; // Ensure userId is set
 
     const chatDocRef = doc(db, "userChats", userId);
-    const messagesRef = collection(chatDocRef, "messages");
+    const messagesRef = collection(chatDocRef, recipientID);
     const messagesQuery = query(messagesRef, orderBy("timestamp", "asc"));
 
-    try {
-      const querySnapshot = await getDocs(messagesQuery);
-      const loadedMessages = querySnapshot.docs.map((doc) => doc.data());
-      console.log("Loaded messages:", loadedMessages);
-      setMessages(loadedMessages); // Update state with loaded messages
-    } catch (error) {
-      console.error("Error loading messages:", error);
-    }
+    // Set up a listener for real-time updates
+    const unsubscribe = onSnapshot(
+      messagesQuery,
+      (querySnapshot) => {
+        const loadedMessages = querySnapshot.docs.map((doc) => ({
+          id: doc.id, // Capture the document ID if needed
+          ...doc.data(),
+        }));
+        setMessages(loadedMessages); // Update state with loaded messages
+      },
+      (error) => {
+        console.error("Error listening for messages:", error);
+      }
+    );
+
+    return unsubscribe; // Return the unsubscribe function
   };
+
+  // Cleanup listener when the recipient changes
+  // useEffect(() => {
+  //   if (selectedRecipientId) {
+  //     const unsubscribe = loadMessages(selectedRecipientId);
+  //     return () => unsubscribe(); // Cleanup the listener
+  //   }
+  // }, [selectedRecipientId]);
 
   return (
     <>
-    <div className="absolute bottom-0 -left-4 w-2/5 h-1/3 bg-[#329D9C] rounded-full mix-blend-multiply filter blur-xl opacity-45 animate-blob drop-shadow-md"></div>
-          <div className="absolute bottom-0 -right-4 w-2/5 h-1/3 bg-[#bdf2c1] rounded-full mix-blend-multiply filter blur-xl opacity-45 animate-blob animation-delay-4000 drop-shadow-md"></div>
-          <div className="absolute bottom-0 -right-200 w-2/5 h-1/3 bg-[#b2d7d9] rounded-full mix-blend-multiply filter blur-xl opacity-45 animate-blob animation-delay-2000 drop-shadow-md"></div>
+      <div className="absolute bottom-0 -left-4 w-2/5 h-1/3 bg-[#329D9C] rounded-full mix-blend-multiply filter blur-xl opacity-45 animate-blob drop-shadow-md"></div>
+      <div className="absolute bottom-0 -right-4 w-2/5 h-1/3 bg-[#bdf2c1] rounded-full mix-blend-multiply filter blur-xl opacity-45 animate-blob animation-delay-4000 drop-shadow-md"></div>
+      <div className="absolute bottom-0 -right-200 w-2/5 h-1/3 bg-[#b2d7d9] rounded-full mix-blend-multiply filter blur-xl opacity-45 animate-blob animation-delay-2000 drop-shadow-md"></div>
       <div className="header">
         <h1 className="Title">Messages</h1>
       </div>
@@ -226,9 +252,9 @@ function MessageUI() {
           </div>
         </div>
 
-        <div className="min-w-[70%] max-w-[45vw] h-[80vh] max-h-[84.4%] bg-green shadow-lg rounded-lg relative mx-auto mt-4 flex flex-col">
-          <div className="flex overflow-auto p-4 flex-col-reverse ">
-            <ul className="space-y-4">
+        <div className="min-w-[70%] max-w-[45vw] h-[80vh] max-h-[91%] bg-green shadow-lg rounded-lg relative mx-auto mt-4 flex flex-col">
+          <div className="flex-1 overflow-auto p-4 flex flex-col-reverse">
+            <ul className="space-y-4 ">
               {messages.length > 0 ? (
                 messages.map((msg, index) => (
                   <li
@@ -246,9 +272,11 @@ function MessageUI() {
                     >
                       <p>{msg.content}</p>
                       <span className="text-xs text-gray-500">
-                        {new Date(
-                          msg.timestamp.seconds * 1000
-                        ).toLocaleTimeString()}
+                        {msg.timestamp && msg.timestamp.seconds
+                          ? new Date(
+                              msg.timestamp.seconds * 1000
+                            ).toLocaleTimeString()
+                          : "Timestamp not available"}
                       </span>
                     </div>
                   </li>
@@ -258,7 +286,8 @@ function MessageUI() {
               )}
             </ul>
           </div>
-          <div className="flex items-center p-4 border-t border-gray-200 bg-white">
+
+          <div className="p-4 border-t border-gray-200 bg-white flex items-center">
             <input
               type="text"
               placeholder="Type a message"
@@ -269,7 +298,7 @@ function MessageUI() {
             <button
               onClick={async () => {
                 await sendMessage(selectedRecipientId, messageContent);
-                await loadMessages(); // Ensure messages are loaded after sending
+                await loadMessages(selectedRecipientId); // Ensure messages are loaded after sending
                 setMessageContent(""); // Optionally clear the message input after sending
               }}
               className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
