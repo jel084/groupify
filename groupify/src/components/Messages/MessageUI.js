@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../Messages/MessageUI.css"; // Assuming your existing CSS file path
 import { db } from "../../firebase"; // Import Firestore instance
 import {
@@ -25,6 +25,8 @@ function MessageUI() {
   const [messageContent, setMessageContent] = useState(""); // State for message content
   const [selectedRecipientId, setSelectedRecipientId] = useState(null); // State for selected recipient ID
   const [messages, setMessages] = useState([]);
+
+  const messagesEndRef = useRef(null); // Ref for scrolling
 
   useEffect(() => {
     const auth = getAuth();
@@ -137,7 +139,7 @@ function MessageUI() {
           timestamp: serverTimestamp(),
         }),
       ]);
-
+      
       console.log("Message sent successfully");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -160,22 +162,18 @@ function MessageUI() {
           ...doc.data(),
         }));
         setMessages(loadedMessages); // Update state with loaded messages
+        scrollToBottom();
       },
       (error) => {
         console.error("Error listening for messages:", error);
       }
     );
-
     return unsubscribe; // Return the unsubscribe function
   };
 
-  // Cleanup listener when the recipient changes
-  // useEffect(() => {
-  //   if (selectedRecipientId) {
-  //     const unsubscribe = loadMessages(selectedRecipientId);
-  //     return () => unsubscribe(); // Cleanup the listener
-  //   }
-  // }, [selectedRecipientId]);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <>
