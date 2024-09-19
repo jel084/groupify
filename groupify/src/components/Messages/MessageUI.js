@@ -139,7 +139,7 @@ function MessageUI() {
           timestamp: serverTimestamp(),
         }),
       ]);
-      
+
       console.log("Message sent successfully");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -236,23 +236,34 @@ function MessageUI() {
             )}
           </div>
           <div className="groupDm">
-            <h2>Your Chats</h2>
-            <ul>
-              {selectedUsers.map((user) => (
-                <li key={user.id} className="chat-preview">
-                  {user.email}
-                </li>
-              ))}
-            </ul>
+
           </div>
           <div className="personalDm">
-            {/* Display messages for selected recipient here */}
+            <h2>Your Chats</h2>
+            {/* unordered list of chats - basically creates a list based on userID 
+            and when you click it */}
+            <ul>
+              {selectedUsers.length > 0 ? (
+                selectedUsers.map((user) => (
+                  <li key={user.id} className="chat-preview">
+                    <button
+                      onClick={() => handleUserClick(user)} // Load messages for the selected user
+                      className="w-full text-left px-4 py-2 bg-gray-200 hover:bg-gray-400"
+                    >
+                      {user.email}
+                    </button>
+                  </li>
+                ))
+              ) : (
+                <p>No chats available</p>
+              )}
+            </ul>
           </div>
         </div>
 
         <div className="min-w-[70%] max-w-[45vw] h-[80vh] max-h-[91%] bg-green shadow-lg rounded-lg relative mx-auto mt-4 flex flex-col">
           <div className="flex-1 overflow-auto p-4 flex flex-col-reverse">
-            <ul className="space-y-4 ">
+            <ul className="space-y-4">
               {messages.length > 0 ? (
                 messages.map((msg, index) => (
                   <li
@@ -261,29 +272,28 @@ function MessageUI() {
                       msg.senderID === userId ? "justify-end" : "justify-start"
                     }`}
                   >
-                    <div
-                      className={`max-w-xs px-4 py-2 rounded-lg ${
-                        msg.senderID === userId
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-200 text-gray-800"
-                      }`}
-                    >
-                      <p>{msg.content}</p>
-                      {/* <span className="text-xs text-gray-300">
-                        {msg.timestamp && msg.timestamp.seconds
-                          ? new Date(
-                              msg.timestamp.seconds * 1000
-                            ).toLocaleTimeString()
-                          : "Timestamp not available"}
-                      </span> */}
-                    </div>
-                      <span className="text-xs text-gray-300">
+                    <div className={`flex flex-col max-w-xs`}>
+                      <div
+                        className={`px-4 py-2 rounded-lg ${
+                          msg.senderID === userId
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-800"
+                        }`}
+                      >
+                        <p>{msg.content}</p>
+                      </div>
+                      <span
+                        className={`text-xs text-gray-800 mt-1 ${
+                          msg.senderID === userId ? "text-right" : "text-left"
+                        }`}
+                      >
                         {msg.timestamp && msg.timestamp.seconds
                           ? new Date(
                               msg.timestamp.seconds * 1000
                             ).toLocaleTimeString()
                           : "Timestamp not available"}
                       </span>
+                    </div>
                   </li>
                 ))
               ) : (
