@@ -269,14 +269,21 @@ function MessageUI() {
                       }`}
                     >
                       <p>{msg.content}</p>
-                      <span className="text-xs text-gray-500">
+                      {/* <span className="text-xs text-gray-300">
+                        {msg.timestamp && msg.timestamp.seconds
+                          ? new Date(
+                              msg.timestamp.seconds * 1000
+                            ).toLocaleTimeString()
+                          : "Timestamp not available"}
+                      </span> */}
+                    </div>
+                      <span className="text-xs text-gray-300">
                         {msg.timestamp && msg.timestamp.seconds
                           ? new Date(
                               msg.timestamp.seconds * 1000
                             ).toLocaleTimeString()
                           : "Timestamp not available"}
                       </span>
-                    </div>
                   </li>
                 ))
               ) : (
@@ -286,12 +293,24 @@ function MessageUI() {
           </div>
 
           <div className="p-4 border-t border-gray-200 bg-white flex items-center">
-            <input
+            {/* <input
               type="text"
               placeholder="Type a message"
               value={messageContent}
               onChange={(e) => setMessageContent(e.target.value)}
               className="flex-grow p-2 border border-gray-300 rounded-lg"
+            /> */}
+            <textarea
+              placeholder="Type a message"
+              value={messageContent}
+              onChange={(e) => setMessageContent(e.target.value)}
+              rows={1} // Starting with one row
+              onInput={(e) => {
+                e.target.style.height = "auto"; // Reset height to auto
+                e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height based on content
+              }}
+              className="flex-grow p-2 border border-gray-300 rounded-lg resize-none max-w-[calc(100%-64px)]" // Prevents resizing horizontally and limits max width
+              style={{ minHeight: "40px", minWidth: "50px" }} // Set a minimum height if you want
             />
             <button
               onClick={async () => {
