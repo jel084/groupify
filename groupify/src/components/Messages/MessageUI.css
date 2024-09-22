@@ -63,7 +63,7 @@
     max-width: 45vw;
     max-height: 20%;
     height: 80vh;
-    background-color: rgb(77, 77, 77);
+    background-color: rgb(255, 255, 255);
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     margin: 10px;
@@ -72,9 +72,9 @@
 .personalDm{
     min-width: 20%;
     max-width: 45vw;
-    max-height: 67%;
+    max-height: 52%;
     height: 48vh;
-    background-color: rgb(77, 77, 77);
+    background-color: rgb(255, 255, 255);
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     margin: 10px;

@@ -233,14 +233,15 @@ function MessageUI() {
                 ))}
               </ul>
             ) : (
-              <p>No results</p>
+              <p className="px-3">No results</p>
             )}
           </div>
           <div className="groupDm">
 
           </div>
+          <h2 className="px-3">Your Chats</h2>
           <div className="personalDm">
-            <h2>Your Chats</h2>
+            
             {/* unordered list of chats - basically creates a list based on userID 
             and when you click it */}
             <ul>
@@ -249,7 +250,7 @@ function MessageUI() {
                   <li key={user.id} className="chat-preview">
                     <button
                       onClick={() => handleUserClick(user)} // Load messages for the selected user
-                      className="w-full text-left px-4 py-2 bg-gray-200 hover:bg-gray-400"
+                      className="w-full text-left px-4 py-3 bg-cyan-50 hover:bg-cyan-100"
                     >
                       {user.email}
                     </button>
