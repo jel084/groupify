@@ -15,6 +15,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+//poop
 
 function MessageUI() {
   const [searchQuery, setSearchQuery] = useState("");
