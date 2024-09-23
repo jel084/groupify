@@ -23,7 +23,7 @@ const SignIn = () => {
     try{
       await createUserWithEmailAndPassword(auth, email, password);
       console.log('User signed up:', username, email);
-      navigate('/dashboard');
+      navigate('/profile');
     } catch (err) {
       setError(err.message);
       console.error('Error signing up:', err);
