@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase';
+import React, { useState, useEffect } from 'react';
+import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { auth } from '../../firebase';
+import { getTasksForUser } from './firebaseService'; // Import getTasksForUser function
 import './Dashboard.css';
-
-
+import { onAuthStateChanged } from 'firebase/auth';
 export const Dashboard = () => {
   //state hooks - define state variables 
   //tasks holds an arary of current tasks - initally empty array and setTasks function is used to update state
@@ -15,14 +16,31 @@ export const Dashboard = () => {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingTaskText, setEditingTaskText] = useState("");
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchTasks(user.uid); // Fetch tasks once the user is authenticated
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup on unmount
+  }, []);
+
+  // Function to fetch tasks from Firestore for the logged-in user
+  const fetchTasks = async (userId) => {
+    const fetchedTasks = await getTasksForUser(userId);
+    setTasks(fetchedTasks); // Set tasks in the local state
+  };
+
   //handle adding task 
   //first if statement checks whether newTask is not empty or whitespace - trim removes leading and trailing spaces from the string 
   //adds to fireStore with addDoc - add tasks under specific task collection 
   //updates localstate setTasks - adds new tasks to local tasks array - with exisitng tasks + new one 
   //setNewTask("") clears input field after adding the tasks
   const handleAddTask = async () => {
-    if (newTask.trim()) {
-      const taskRef = await addDoc(collection(db, "users", "USER_ID", "tasks"), { text: newTask, completed: false });
+    const user = auth.currentUser;
+    if (newTask.trim() && user) {
+      const taskRef = await addDoc(collection(db, "users", user.uid, "tasks"), { text: newTask, completed: false });
       setTasks([...tasks, { id: taskRef.id, text: newTask, completed: false }]);
       setNewTask("");
     }
@@ -32,9 +50,12 @@ export const Dashboard = () => {
   //update the firestore - updatedDoc by flippings its value from true to false or false to true 
   //update local state - takes local array task with matching id and toggle completed field
   const handleToggleTask = async (id, completed) => {
-    const taskRef = doc(db, "users", "USER_ID", "tasks", id);
-    await updateDoc(taskRef, { completed: !completed });
-    setTasks(tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task));
+    const user = auth.currentUser;
+    if (user) {
+      const taskRef = doc(db, "users", user.uid, "tasks", id);
+      await updateDoc(taskRef, { completed: !completed });
+      setTasks(tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task));
+    }
   };
 
   //handles editing a task
@@ -51,8 +72,9 @@ export const Dashboard = () => {
   //updates local state setTasks -> updates tasks array replaceing text of the task with editingTaskId 
   //clesr editing state and allows user to exit edit mode 
   const handleUpdateTask = async () => {
-    if (editingTaskText.trim()) {
-      const taskRef = doc(db, "users", "USER_ID", "tasks", editingTaskId);
+    const user = auth.currentUser;
+    if (editingTaskText.trim() && user) {
+      const taskRef = doc(db, "users", user.uid, "tasks", editingTaskId);
       await updateDoc(taskRef, { text: editingTaskText });
       setTasks(tasks.map(task => task.id === editingTaskId ? { ...task, text: editingTaskText } : task));
       setEditingTaskId(null);
@@ -64,9 +86,12 @@ export const Dashboard = () => {
   //deletes firestore doc 
   //updates local state of tasks array removing task from list displayed
   const handleDeleteTask = async (id) => {
-    const taskRef = doc(db, "users", "USER_ID", "tasks", id);
-    await deleteDoc(taskRef);
-    setTasks(tasks.filter(task => task.id !== id));
+    const user = auth.currentUser;
+    if (user) {
+      const taskRef = doc(db, "users", user.uid, "tasks", id);
+      await deleteDoc(taskRef);
+      setTasks(tasks.filter(task => task.id !== id));
+    }
   };
 
   return (
